@@ -8,7 +8,7 @@ The main kernel workflow pins this repository to an exact commit and calls the s
 
 The fix engine verifies the real source path used by Kbuild.
 
-For SukiSU-Ultra, `drivers/kernelsu` is a symlink. The SukiSU fix is applied to the resolved symlink target and then verified through that same path. This prevents a patch from being reported as successful while the compiler still sees the old source.
+For SukiSU-Ultra, `drivers/kernelsu` is a symlink. The SukiSU fix is applied to the resolved symlink target and then verified through that same path. The fix is content-based and idempotent, so it remains stable when upstream line numbers or unrelated context change.
 
 ## Current target
 
