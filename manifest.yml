@@ -8,7 +8,7 @@ targets:
       sukisu-ultra:
         base: b20dee702035af09cb2ecb5f35443bbc1747f3e6
         compatibility:
-          - patches/sukisu-ultra/001-sukisu-4.9-compat.patch
+          - scripts/patch_sukisu_ultra_4_9.py
       resukisu:
         base: 6803643e19e2e6e8287f96461aabb93bdd6c47fa
         compatibility:
