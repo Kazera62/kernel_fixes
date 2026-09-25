@@ -41,7 +41,9 @@ case "$ROOT_IMPL" in
     if [ "$KPM" = "on" ]; then
       grep -Fq 'config ARCH_HAS_SET_MEMORY' "$KERNEL_ROOT/arch/Kconfig" || die "KPM ARCH_HAS_SET_MEMORY fix missing"
       grep -Fq 'select ARCH_HAS_SET_MEMORY' "$KERNEL_ROOT/arch/arm64/Kconfig" || die "KPM arm64 selection fix missing"
-      test -s "$KERNEL_ROOT/arch/arm64/include/asm/set_memory.h" || die "KPM set_memory header missing"
+      grep -Fq 'generic-y += set_memory.h' "$KERNEL_ROOT/arch/arm64/include/asm/Kbuild" || die "KPM arm64 generic set_memory integration missing"
+      test -s "$KERNEL_ROOT/include/asm-generic/set_memory.h" || die "KPM generic set_memory header missing"
+      grep -Fq '#include <asm/set_memory.h>' "$KERNEL_ROOT/arch/arm64/include/asm/cacheflush.h" || die "KPM arm64 cacheflush integration missing"
       ok "KPM 4.9 memory compatibility is present"
     fi
     ;;
