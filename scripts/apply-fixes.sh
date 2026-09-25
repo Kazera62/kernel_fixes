@@ -35,12 +35,12 @@ apply_patch_once() {
   local label="$3"
 
   log "Applying $label"
-  if patch -d "$patch_dir" -p1 --dry-run < "$patch_file" >/tmp/kernel-fixes-dryrun.log 2>&1; then
-    patch -d "$patch_dir" -p1 < "$patch_file"
+  if patch -d "$patch_dir" -p1 -N --batch --dry-run < "$patch_file" >/tmp/kernel-fixes-dryrun.log 2>&1; then
+    patch -d "$patch_dir" -p1 -N --batch < "$patch_file"
     return
   fi
 
-  if patch -d "$patch_dir" -p1 -R --dry-run < "$patch_file" >/tmp/kernel-fixes-reverse.log 2>&1; then
+  if patch -d "$patch_dir" -p1 -R --batch --dry-run < "$patch_file" >/tmp/kernel-fixes-reverse.log 2>&1; then
     log "$label already applied"
     return
   fi
