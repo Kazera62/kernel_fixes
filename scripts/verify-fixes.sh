@@ -35,7 +35,9 @@ case "$ROOT_IMPL" in
     ! grep -Fq 'ksu_selinux_hide_handle_post_fs_data();' "$KSU_DIR/runtime/ksud.c" || die "old post-fs-data SELinux hook remains"
     ! grep -Fq 'ksu_selinux_hide_handle_second_stage();' "$KSU_DIR/runtime/ksud.c" || die "old second-stage SELinux hook remains"
     grep -Fq 'ksu_strncpy_from_user_nofault' "$KSU_DIR/sulog/event.c" || die "4.9 strncpy compatibility is missing"
-    grep -Fq '#define USER_ARG_NULL (&(struct user_arg_ptr){ 0 })' "$KSU_DIR/sulog/event.c" || die "user_arg_ptr compatibility is missing"
+    grep -Fq '#ifdef CONFIG_KSU_SUSFS' "$KSU_DIR/sulog/event.c" || die "user_arg_ptr SUSFS conditional is missing"
+    grep -Fq '#define USER_ARG_NULL (&(struct user_arg_ptr){ 0 })' "$KSU_DIR/sulog/event.c" || die "SUSFS user_arg_ptr compatibility is missing"
+    grep -Fq '#define USER_ARG_NULL ((struct user_arg_ptr){ 0 })' "$KSU_DIR/sulog/event.c" || die "non-SUSFS user_arg_ptr compatibility is missing"
     ok "SukiSU-Ultra source is patched at the compiler target"
 
     if [ "$KPM" = "on" ]; then
