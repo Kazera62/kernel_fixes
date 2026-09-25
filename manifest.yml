@@ -9,6 +9,7 @@ targets:
         base: b20dee702035af09cb2ecb5f35443bbc1747f3e6
         compatibility:
           - scripts/patch_sukisu_ultra_4_9.py
+          - non-gki-4.9-manual-hooks (exec/open/read/stat/reboot/input/devpts + manager prctl bootstrap)
       resukisu:
         base: 6803643e19e2e6e8287f96461aabb93bdd6c47fa
         compatibility:
