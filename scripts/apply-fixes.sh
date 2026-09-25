@@ -65,7 +65,7 @@ if [ "$ROOT_IMPL" = "sukisu-ultra" ]; then
   esac
 
   log "Patching exact compiler source: $KSU_DIR"
-  apply_patch_once     "$KSU_DIR"     "$FIXES_ROOT/patches/sukisu-ultra/001-sukisu-4.9-compat.patch"     "SukiSU-Ultra 4.9 compatibility"
+  python3 "$FIXES_ROOT/scripts/patch_sukisu_ultra_4_9.py" "$KSU_DIR"
 
   if [ "$KPM" = "on" ]; then
     KPM_URL="https://raw.githubusercontent.com/JackA1ltman/NonGKI_Kernel_Build_2nd/fe5053e603e20ce6ba97900da2c3c0229c7505d4/Patches/Patch/set_memory_to_49_and_low.patch"
