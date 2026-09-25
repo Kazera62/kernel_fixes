@@ -85,8 +85,12 @@ edit(
 edit(
     sulog,
     '#define USER_ARG_NULL user_arg_null_ptr()',
-    '#define USER_ARG_NULL (&(struct user_arg_ptr){ 0 })',
-    "fix user_arg_ptr ABI mismatch",
+    '''#ifdef CONFIG_KSU_SUSFS
+#define USER_ARG_NULL (&(struct user_arg_ptr){ 0 })
+#else
+#define USER_ARG_NULL ((struct user_arg_ptr){ 0 })
+#endif''',
+    "fix user_arg_ptr ABI mismatch for SUSFS/non-SUSFS",
 )
 
 print("[kernel-fixes] SukiSU 4.9 source transformation completed")
