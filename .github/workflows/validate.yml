@@ -1,0 +1,40 @@
+name: Validate Kernel Fixes
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  validate-sukisu-ultra-4-9:
+    name: Validate SukiSU-Ultra 4.9 fix
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+
+    steps:
+      - name: Checkout fixes
+        uses: actions/checkout@v7.0.1
+
+      - name: Install patch tooling
+        run: |
+          set -euxo pipefail
+          sudo apt-get update
+          sudo apt-get install -y git patch curl
+
+      - name: Prepare pinned SukiSU source
+        run: |
+          set -euxo pipefail
+          mkdir -p test-kernel/drivers
+          git clone --depth=1 https://github.com/SukiSU-Ultra/SukiSU-Ultra.git test-kernel/KernelSU
+          git -C test-kernel/KernelSU fetch --depth=1 origin b20dee702035af09cb2ecb5f35443bbc1747f3e6
+          git -C test-kernel/KernelSU checkout --detach b20dee702035af09cb2ecb5f35443bbc1747f3e6
+          ln -s ../KernelSU/kernel test-kernel/drivers/kernelsu
+          readlink -f test-kernel/drivers/kernelsu
+
+      - name: Apply and verify SukiSU fix
+        run: |
+          set -euxo pipefail
+          bash scripts/apply-fixes.sh             --kernel-root "$GITHUB_WORKSPACE/test-kernel"             --device sdm450             --root sukisu-ultra             --kpm off             --susfs off
+
+          bash scripts/verify-fixes.sh             --kernel-root "$GITHUB_WORKSPACE/test-kernel"             --device sdm450             --root sukisu-ultra             --kpm off             --susfs off
