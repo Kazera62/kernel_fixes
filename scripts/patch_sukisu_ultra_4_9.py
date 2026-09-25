@@ -225,7 +225,7 @@ extern int ksu_handle_execveat(int *fd, struct filename **filename_ptr,
 exec_c = kernel_root / "fs" / "exec.c"
 insert_once(
     exec_c,
-    "static int do_execveat_common(int fd, struct filename *filename,\\n",
+    "static int do_execveat_common(int fd, struct filename *filename,\n",
     manual_patches[0][2],
     "manual execve hook declaration",
 )
