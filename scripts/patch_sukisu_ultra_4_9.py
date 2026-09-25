@@ -54,17 +54,24 @@ if "#define fallthrough" not in compat_text:
 else:
     print("[kernel-fixes] already fixed: fallthrough compatibility macro")
 
-edit(
+def remove_call(path: Path, needle: str, label: str) -> None:
+    lines = path.read_text().splitlines(keepends=True)
+    if not any(needle in line for line in lines):
+        print(f"[kernel-fixes] already fixed: {label}")
+        return
+    filtered = [line for line in lines if needle not in line]
+    path.write_text("".join(filtered))
+    print(f"[kernel-fixes] fixed: {label}")
+
+remove_call(
     ksud,
-    '    stop_input_hook();\n    ksu_selinux_hide_handle_post_fs_data();',
-    '    stop_input_hook();',
+    "ksu_selinux_hide_handle_post_fs_data();",
     "remove incompatible post-fs-data SELinux hook",
 )
 
-edit(
+remove_call(
     ksud,
-    '            pr_info("/system/bin/init second_stage executed\\n");\n            ksu_selinux_hide_handle_second_stage();\n            apply_kernelsu_rules();',
-    '            pr_info("/system/bin/init second_stage executed\\n");\n            apply_kernelsu_rules();',
+    "ksu_selinux_hide_handle_second_stage();",
     "remove incompatible second-stage SELinux hook",
 )
 
